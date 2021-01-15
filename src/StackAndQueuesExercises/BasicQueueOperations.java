@@ -1,6 +1,7 @@
 package StackAndQueuesExercises;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class BasicQueueOperations {
@@ -26,6 +27,7 @@ public class BasicQueueOperations {
         }else if(queue.isEmpty()){
             System.out.println(0);
         }else{
+           // Integer maxNumber = Collections.max(queue);
             int min = Integer.MAX_VALUE;
             for (Integer num : queue) {
                 int current = num;
