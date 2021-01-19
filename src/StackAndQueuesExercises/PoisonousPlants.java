@@ -1,45 +1,46 @@
 package StackAndQueuesExercises;
 
-import java.util.ArrayDeque;
-import java.util.Scanner;
+import java.util.*;
 
 public class PoisonousPlants {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
 
-        //number of plants
-        int n = Integer.parseInt(scan.nextLine());
-        String [] line = scan.nextLine().split("\\s+");
-        int [] plants = new int[n];
+        Scanner scanner = new Scanner(System.in);
 
-        for (int i = 0; i < n; i++) {
-            plants[i] = Integer.parseInt(line[i]);
+        int n = Integer.parseInt(scanner.nextLine());
+
+        int[] plants = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        int[] days = new int[n];
+
+        ArrayDeque<Integer> prevPlants = new ArrayDeque<>();
+        prevPlants.push(0);
+
+        for (int i = 1; i < plants.length; i++) {
+            int day = 0;
+
+            while (!prevPlants.isEmpty() && plants[prevPlants.peek()] >= plants[i]) {
+                day = Math.max(day, days[prevPlants.pop()]);
+            }
+            if (!prevPlants.isEmpty()) {
+                days[i] = day + 1;
+            }
+
+            prevPlants.push(i);
+
         }
 
-        ArrayDeque<Integer> indices = new ArrayDeque<>();
-        indices.push(0);
-        int [] days = new int[n];
 
-        for (int i = 1; i < n; i++) {
-            int maxDays = 0;
-            while (!indices.isEmpty() && plants[indices.peek()] >= plants[i]){
-                maxDays = Math.max(maxDays,days[indices.pop()]);
-            }
-            if(!indices.isEmpty()){
-                days[i] = maxDays+1;
-            }
-            indices.push(i);
-        }
-        System.out.println(getLastDay(days));
+        System.out.println(
+                Arrays.stream(days).max().getAsInt()
+        );
+
+
     }
 
-    private static int getLastDay(int[] days) {
-        int lastDay = 0;
-        for (int day : days) {
-            if(day > lastDay){
-                lastDay = day;
-            }
-        }
-        return lastDay;
-    }
+
 }
+
+

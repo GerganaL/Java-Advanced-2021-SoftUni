@@ -10,10 +10,10 @@ public class MaximumSumOf2X2Submatrix {
         int [] dimensions = Arrays.stream(scan.nextLine().split(", "))
                 .mapToInt(Integer::parseInt)
                 .toArray();
-        
+
         int rows = dimensions[0];
         int cols = dimensions[1];
-        
+
         int [] [] matrix = new int[rows][cols];
 
         for (int row = 0; row < rows; row++) {
@@ -25,6 +25,7 @@ public class MaximumSumOf2X2Submatrix {
         int maxValue = Integer.MIN_VALUE;
 
         int [][] bestMatrix = new int[2][2];
+
         for (int row = 0; row < rows -1 ; row++) {
             for (int col = 0; col < cols - 1; col++) {
                 int currentSum
