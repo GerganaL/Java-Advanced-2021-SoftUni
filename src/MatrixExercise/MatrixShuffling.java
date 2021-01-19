@@ -1,64 +1,59 @@
 package MatrixExercise;
 
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MatrixShuffling {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        String [] nm = scan.nextLine().split("\\s+");
-        int n = Integer.parseInt(nm[0]);
-        int m = Integer.parseInt(nm[1]);
+        int[] input = Arrays.stream(scan.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+        int rowSize = input[0];
+        int colSize = input[1];
+        String[][] arr = new String[rowSize][];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = scan.nextLine().split("\\s+");
+        }
 
-        String[][] matrix = readMatrix(scan,n,m);
+        String pattern = "^swap (\\d+) (\\d+) (\\d+) (\\d+)$"; // Regex is used because there is a test with invalid number
+        Pattern patternCompile = Pattern.compile(pattern);
+        String cmd = scan.nextLine();
+        while (!"END".equals(cmd)) {
+            boolean isValid = true;
+            Matcher matcher = patternCompile.matcher(cmd);
+            if (matcher.matches()) {
+                int row1 = Integer.parseInt(matcher.group(1));
+                int col1 = Integer.parseInt(matcher.group(2));
+                int row2 = Integer.parseInt(matcher.group(3));
+                int col2 = Integer.parseInt(matcher.group(4));
+                boolean isInArray = row1 >= 0 && row1 < rowSize && row2 >= 0 && row2 < rowSize
+                        && col1 >= 0 && col1 < colSize && col2 >= 0 && col2 < colSize;
+                if (isInArray) {
+                    String temp = arr[row1][col1];
+                    arr[row1][col1] = arr[row2][col2];
+                    arr[row2][col2] = temp;
+                    printArray(arr);
+                } else {
+                    isValid = false;
+                }
 
-        String input = scan.nextLine();
-        while (!input.equals("END")){
-            String [] commands = input.split("\\s+");
-            if(commands[0].equals("swap")){
-                int row1 = Integer.parseInt(commands[1]);
-                int col1 = Integer.parseInt(commands[2]);
-                int row2 = Integer.parseInt(commands[3]);
-                int col2 = Integer.parseInt(commands[4]);
-                swapElements(matrix,row1,col1,row2,col2);
-            }else{
-                System.out.println("Invalid output!");
+            } else {
+                isValid = false;
             }
-            input = scan.nextLine();
+            if (!isValid) {
+                System.out.println("Invalid input!");
+            }
+            cmd = scan.nextLine();
         }
     }
 
-    private static void printMatrix(String[][] matrix) {
-        for (String[] row : matrix) {
+    private static void printArray(String[][] arr) {
+        for (String[] row : arr) {
             for (String element : row) {
-                System.out.print(element + " ");
+                System.out.printf("%s ", element);
             }
             System.out.println();
         }
-    }
-
-    private static void swapElements(String[][] matrix, int row1, int col1, int row2, int col2) {
-        if(isValid(row1,col1,matrix) && isValid(row2,col2,matrix)){
-            String current = matrix[row1][col1];
-            matrix[row1][col1] = matrix[row2][col2];
-            matrix[row2][col2] = current;
-            printMatrix(matrix);
-        }else{
-            System.out.println("Invalid input!");
-        }
-    }
-
-    private static boolean isValid(int row, int col, String[][] matrix) {
-        return row >= 0 && row < matrix.length && col >= 0 && col < matrix[row].length;
-    }
-
-    public static String [][] readMatrix(Scanner scan, int rows, int cols){
-        String [][] firstMatrix = new String[rows][cols];
-        for (int r = 0; r < rows; r++) {
-            String[] line = scan.nextLine().split("\\s+");
-            for (int c = 0; c < cols; c++) {
-                firstMatrix[r][c] = line[c];
-            }
-        }
-        return  firstMatrix;
     }
 }
