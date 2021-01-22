@@ -32,7 +32,7 @@ public class CountSymbols {
         }
 
         charOccurnces.forEach((key, value) -> {
-            System.out.printf("%c: %d times/s%n", key, value);
+            System.out.printf("%c: %d time/s%n", key, value);
             // S: 1 time/s
         });
     }
