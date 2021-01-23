@@ -7,38 +7,35 @@ public class AverageStudentsGrade {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
-        Map<String,double[]> studentsWithGrades = new TreeMap<>();
+        Map<String,List<Double>> students = new TreeMap<>();
+        List<Double> grades = new ArrayList<>();
 
         int n = Integer.parseInt(scan.nextLine());
 
         while (n-- > 0) {
-            String name = scan.nextLine();
-            double[] grades = Arrays.stream(scan.nextLine()
-                    .split("\\s+"))
-                    .mapToDouble(Double::parseDouble)
-                    .toArray();
+            String [] tokens = scan.nextLine().split("\\s+");
+            String student = tokens[0];
+            double grade = Double.parseDouble(tokens[1]);
+            grades.add(grade);
 
-            studentsWithGrades.put(name,grades);
+            students.putIfAbsent(student,new ArrayList<>());
+            students.get(student).add(grade);
+
         }
 
-        studentsWithGrades.forEach((k,v)->{
-            System.out.printf("%s is graduated with %f%n",k,Arrays.stream(v).average().orElse(0));
-        });
+        students.entrySet().stream()
+                .forEach(entry -> {
+                    double sum = 0;
+                    for (int i = 0; i < entry.getValue().size(); i++) {
+                        sum += entry.getValue().get(i);
+                    }
 
-        /*studentsWithGrades.entrySet()
-                .stream()
-                .forEach(s -> {
-                    DecimalFormat df = new DecimalFormat("#.######");
-                    System.out.printf("%s -> %f%n", s.getKey()
-                            , Arrays.stream(s.getValue()).average().getAsDouble());
-                });*/
+                    double average = sum / entry.getValue().size();
 
-        /*for (Map.Entry<Double, Integer> entry : counts.entrySet()) {
-            DecimalFormat df = new DecimalFormat("#.######");
-            System.out.printf("%s -> %d%n", df.format(entry.getKey()), entry.getValue());
-
-        }*/
-
+                    System.out.printf(entry.getKey() + " -> ");
+                    entry.getValue().forEach(e -> System.out.printf("%.2f ",e));
+                    System.out.printf("(avg: %.2f)%n",average);
+                });
 
     }
 
