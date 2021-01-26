@@ -10,6 +10,7 @@ public class RadioactiveMutantVampireBunnies {
         int rows = size[0];
         int cols = size[1];
         char[][] board = new char[rows][cols];
+
         for (int i = 0; i < rows; i++) {
             board[i] = scan.nextLine().toCharArray();
         }
