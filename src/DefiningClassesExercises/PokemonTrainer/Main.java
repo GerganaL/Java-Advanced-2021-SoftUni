@@ -51,9 +51,9 @@ public class Main {
         trainers.entrySet().stream()
                 .sorted((b1, b2) -> Integer.compare(b2.getValue().getBadges(), b1.getValue().getBadges()))
                 .forEach(t -> {
-                    System.out.println(String.format("%s %s %s", t.getKey(),
+                    System.out.printf("%s %s %s%n", t.getKey(),
                             t.getValue().getBadges(),
-                            t.getValue().pokeCollectionSize()));
+                            t.getValue().pokeCollectionSize());
                 });
     }
 }
