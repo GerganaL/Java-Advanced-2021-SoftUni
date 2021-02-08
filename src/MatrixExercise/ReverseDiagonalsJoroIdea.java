@@ -3,7 +3,7 @@ package MatrixExercise;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class ReverseDiagonals {
+public class ReverseDiagonalsJoroIdea {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int [][] matrix = readMatrix(scan);
