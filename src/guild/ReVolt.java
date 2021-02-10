@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class ReVolt {
     static int playerRow;
     static int playerCol;
+    static int[] position;
+    static boolean won;
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -15,140 +17,72 @@ public class ReVolt {
 
         readMatrix(scan, size, matrix);
 
-        boolean won = false;
+        won = false;
 
-        for (int i = 0; i < countOfCommands; i++) {
-            if(!won) {
-                String command = scan.nextLine();
-                switch (command) {
-                    case "up":
-                        matrix[playerRow][playerCol] = '-';
-                        playerRow--;
-                        if (isOut(playerRow, playerCol, matrix)) {
-                            playerRow = matrix.length - 1;
-                            matrix[playerRow][playerCol] = 'f';
-                        } else {
-                            if (matrix[playerRow][playerCol] == 'B') {
-                                playerRow--;
-                                if (isOut(playerRow, playerCol, matrix)) {
-                                    playerRow = matrix.length - 1;
-                                    matrix[playerRow][playerCol] = 'f';
-                                }
-                                matrix[playerRow][playerCol] = 'f';
-                            } else if (matrix[playerRow][playerCol] == 'T') {
-                                playerRow++;
-                                matrix[playerRow][playerCol] = 'f';
-
-                            } else if (matrix[playerRow][playerCol] == 'F') {
-                                matrix[playerRow][playerCol] = 'f';
-                                System.out.println("Player won!");
-                                won = true;
-                                break;
-                            } else {
-                                matrix[playerRow][playerCol] = 'f';
-
-                            }
-                        }
-                        break;
-                    case "down":
-                        matrix[playerRow][playerCol] = '-';
-                        playerRow++;
-                        if (isOut(playerRow, playerCol, matrix)) {
-                            playerRow = 0;
-                            matrix[playerRow][playerCol] = 'f';
-                        } else {
-                            //move(playerRow,playerCol,matrix);
-                            if (matrix[playerRow][playerCol] == 'B') {
-                                playerRow++;
-                                if (isOut(playerRow, playerCol, matrix)) {
-                                    playerRow = 0;
-                                    matrix[playerRow][playerCol] = 'f';
-                                }
-                                matrix[playerRow][playerCol] = 'f';
-                            } else if (matrix[playerRow][playerCol] == 'T') {
-                                playerRow--;
-                                matrix[playerRow][playerCol] = 'f';
-
-                            } else if (matrix[playerRow][playerCol] == 'F') {
-                                matrix[playerRow][playerCol] = 'f';
-                                System.out.println("Player won!");
-                                won = true;
-                                break;
-                            } else {
-                                matrix[playerRow][playerCol] = 'f';
-
-                            }
-                        }
-                        break;
-                    case "left":
-                        matrix[playerRow][playerCol] = '-';
-                        playerCol--;
-                        if (isOut(playerRow, playerCol, matrix)) {
-                            playerCol = matrix[playerRow].length - 1;
-                            matrix[playerRow][playerCol] = 'f';
-                        } else {
-                            //move(playerRow,playerCol,matrix);
-                            if (matrix[playerRow][playerCol] == 'B') {
-                                playerCol--;
-                                if (isOut(playerRow, playerCol, matrix)) {
-                                    playerCol = matrix[playerRow].length - 1;
-                                    matrix[playerRow][playerCol] = 'f';
-                                }
-                                matrix[playerRow][playerCol] = 'f';
-                            } else if (matrix[playerRow][playerCol] == 'T') {
-                                playerCol++;
-                                matrix[playerRow][playerCol] = 'f';
-
-                            } else if (matrix[playerRow][playerCol] == 'F') {
-                                matrix[playerRow][playerCol] = 'f';
-                                System.out.println("Player won!");
-                                won = true;
-                                break;
-                            } else {
-                                matrix[playerRow][playerCol] = 'f';
-
-                            }
-                        }
-                        break;
-                    case "right":
-                        matrix[playerRow][playerCol] = '-';
-                        playerCol++;
-                        if (isOut(playerRow, playerCol, matrix)) {
-                            playerCol = 0;
-                            matrix[playerRow][playerCol] = 'f';
-                        }   //move(playerRow,playerCol,matrix);
-                        if (matrix[playerRow][playerCol] == 'B') {
-                            playerCol++;
-                            if (isOut(playerRow, playerCol, matrix)) {
-                                playerCol = 0;
-                                matrix[playerRow][playerCol] = 'f';
-                            }
-                            matrix[playerRow][playerCol] = 'f';
-                        } else if (matrix[playerRow][playerCol] == 'T') {
-                            playerCol--;
-                            matrix[playerRow][playerCol] = 'f';
-
-                        } else if (matrix[playerRow][playerCol] == 'F') {
-                            matrix[playerRow][playerCol] = 'f';
-                            System.out.println("Player won!");
-                            won = true;
-                            break;
-                        } else {
-                            matrix[playerRow][playerCol] = 'f';
-
-                        }
-                        break;
-                }
-            }
+        while (countOfCommands-- > 0 && !won) {
+            String command = scan.nextLine();
+            matrix[playerRow][playerCol] = '-';
+            position = new int[]{playerRow, playerCol};
+            checkMove(command, matrix);
+            moveTo(matrix, command);
         }
 
         if (!won) {
             System.out.println("Player lost!");
+        } else {
+            System.out.println("Player won!");
         }
 
         printMatrix(matrix);
 
 
+    }
+
+    private static boolean moveTo(char[][] matrix, String command) {
+        if (matrix[playerRow][playerCol] == 'B') {
+            checkMove(command, matrix);
+            moveTo(matrix,command);
+        } else if (matrix[playerRow][playerCol] == 'T') {
+            playerRow = position[0];
+            playerCol = position[1];
+            matrix[playerRow][playerCol] = 'f';
+        } else if (matrix[playerRow][playerCol] == 'F') {
+            matrix[playerRow][playerCol] = 'f';
+            won = true;
+        } else {
+            matrix[playerRow][playerCol] = 'f';
+
+        }
+        return won;
+    }
+
+    private static void checkMove(String command, char[][] matrix) {
+        switch (command) {
+            case "up":
+                playerRow--;
+                if (playerRow < 0) {
+                    playerRow = matrix.length - 1;
+                }
+                break;
+            case "down":
+                playerRow++;
+                if (playerRow > matrix.length - 1) {
+                    playerRow = 0;
+                }
+                break;
+            case "left":
+                playerCol--;
+                if (playerCol < 0) {
+                    playerCol = matrix.length - 1;
+                }
+                break;
+            case "right":
+                playerCol++;
+                if (playerCol > matrix.length - 1) {
+                    playerCol = 0;
+                }
+                break;
+        }
     }
 
     private static void printMatrix(char[][] matrix) {
@@ -158,20 +92,6 @@ public class ReVolt {
             }
             System.out.println();
         }
-    }
-
-    private static void moveForwards(int playerRow, int playerCol, char[][] matrix) {
-        if (matrix[playerRow][playerCol] == 'B') {
-
-        } else if (matrix[playerRow][playerCol] == 'T') {
-
-        } else if (matrix[playerRow][playerCol] == 'F') {
-
-        }
-    }
-
-    public static boolean isOut(int row, int col, char[][] matrix) {
-        return row < 0 || row > matrix.length || col < 0 || col > matrix[row].length;
     }
 
     public static void readMatrix(Scanner scan, int size, char[][] matrix) {
