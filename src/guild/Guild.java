@@ -74,5 +74,6 @@ public class Guild {
         output.append(getName()).append(":").append(System.lineSeparator());
         getRoster().forEach(e -> output.append(e).append(System.lineSeparator()));
         return output.toString();
+
     }
 }
