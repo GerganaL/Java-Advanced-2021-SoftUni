@@ -20,9 +20,9 @@ public class SantasPresentFactory {
             int magic = magicLevel.peek();
             int sum = material * magic;
             if (material != 0 && magic != 0) {
+                materials.pop();
+                magicLevel.poll();
                 if (sum > 0) {
-                    materials.pop();
-                    magicLevel.poll();
                     switch (sum) {
                         case 400:
                             presents.put("Bicycle", presents.containsKey("Bicycle") ? presents.get("Bicycle") + 1 : 1);
@@ -40,8 +40,6 @@ public class SantasPresentFactory {
                             materials.push(material + 15);
                     }
                 } else {
-                    materials.pop();
-                    magicLevel.poll();
                     materials.push(material + magic);
                 }
             } else {

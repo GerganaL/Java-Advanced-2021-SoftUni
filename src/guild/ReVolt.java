@@ -46,6 +46,7 @@ public class ReVolt {
             playerRow = position[0];
             playerCol = position[1];
             matrix[playerRow][playerCol] = 'f';
+
         } else if (matrix[playerRow][playerCol] == 'F') {
             matrix[playerRow][playerCol] = 'f';
             won = true;
@@ -85,6 +86,14 @@ public class ReVolt {
         }
     }
 
+    private static boolean ifFinish(char[][] matrix, boolean won) {
+        if (matrix[playerRow][playerCol] == 'F') {
+            matrix[playerRow][playerCol] = 'f';
+            won = true;
+        }
+        return won;
+    }
+
     private static void printMatrix(char[][] matrix) {
         for (char[] chars : matrix) {
             for (char aChar : chars) {
@@ -92,6 +101,11 @@ public class ReVolt {
             }
             System.out.println();
         }
+    }
+
+
+    public static boolean isOut(int row, int col, char[][] matrix) {
+        return row < 0 || row > matrix.length || col < 0 || col > matrix[row].length;
     }
 
     public static void readMatrix(Scanner scan, int size, char[][] matrix) {
