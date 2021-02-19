@@ -1,4 +1,4 @@
-package vetClinic;
+package vetClinicRewritten;
 
 public class Pet {
     private String name;

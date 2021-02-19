@@ -1,4 +1,4 @@
-package vetClinic;
+package vetClinicRewritten;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package vetClinic;
+package vetClinicRewritten;
 
 public class Main {
     public static void main(String[] args) {
